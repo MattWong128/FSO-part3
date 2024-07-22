@@ -2,8 +2,7 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content":"new note",
-    "important":true,
+    "important":false,
     "as":"asdfasdf"
 }
 ###
