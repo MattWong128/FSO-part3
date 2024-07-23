@@ -57,3 +57,15 @@ app.delete("/api/persons/:id", (req, res) => {
 
   res.status(200).send(`${person.name} id: ${person.id} was deleted`);
 });
+
+app.post("/api/persons", (req, res) => {
+  const person = req.body;
+  if (!person) return res.status(400).end("invalid person cant add");
+  const personToAdd = {
+    ...person,
+    id: String(Math.floor(Math.random() * 1000)),
+  };
+
+  persons = persons.concat(personToAdd);
+  res.send(204);
+});
