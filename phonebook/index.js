@@ -31,7 +31,7 @@ app.listen(PORT, "localhost", () => console.log("listening on port ", PORT));
 app.get("/", (req, res) => res.send("hello"));
 
 app.get("/api/persons", (req, res) => {
-  res.send(persons);
+  res.json(persons);
 });
 
 app.get("/info", (req, res) => {
@@ -44,5 +44,5 @@ app.get("/api/persons/:id", (req, res) => {
   const person = persons.find((person) => person.id == id);
 
   if (!person) return res.status(404).end("person not found");
-  res.status(200).send(person);
+  res.status(200).json(person);
 });
