@@ -61,6 +61,20 @@ app.delete("/api/persons/:id", (req, res) => {
 app.post("/api/persons", (req, res) => {
   const person = req.body;
   if (!person) return res.status(400).end("invalid person cant add");
+  if (!person.name)
+    return res.status(400).json({
+      error: "must provide name",
+    });
+
+  if (!person.number)
+    return res.status(400).json({
+      error: "must provide number",
+    });
+  if (persons.map((p) => p.name).find((p) => p == person.name))
+    return res.status(400).json({
+      error: "must provide unique name",
+    });
+
   const personToAdd = {
     ...person,
     id: String(Math.floor(Math.random() * 1000)),
