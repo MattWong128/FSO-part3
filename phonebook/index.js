@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
 const PORT = 3001;
 let persons = [
@@ -25,6 +26,7 @@ let persons = [
 ];
 
 app.use(express.json());
+app.use(morgan("tiny"));
 
 app.listen(PORT, "localhost", () => console.log("listening on port ", PORT));
 
