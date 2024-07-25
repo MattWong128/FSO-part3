@@ -1,5 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
+
 const app = express();
 const PORT = 3001;
 let persons = [
@@ -26,8 +28,10 @@ let persons = [
 ];
 
 app.use(express.json());
+app.use(cors());
+app.use;
 morgan.token('person', (req, res) => {
-  if (req.method == 'GET') return '';
+  if (req.method != 'POST') return '';
   return JSON.stringify(req.body);
 });
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :person'));
@@ -67,6 +71,7 @@ app.delete('/api/persons/:id', (req, res) => {
 app.post('/api/persons', (req, res) => {
   const person = req.body;
   const existingNames = persons.map((p) => p.name);
+
   if (!person) return res.status(400).end('invalid person cant add');
   if (!person.name)
     return res.status(400).json({
@@ -88,5 +93,5 @@ app.post('/api/persons', (req, res) => {
   };
 
   persons = persons.concat(personToAdd);
-  res.send(204);
+  res.status(201).json(personToAdd);
 });
