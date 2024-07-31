@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 //mongodb+srv://user:ltRvk6bH7SXYoler@cluster0.6dobhny.mongodb.net/
 
-if (process.argv.length < 5) {
+if (process.argv.length < 3) {
   console.log('give password as argument');
   process.exit(1);
 }
@@ -32,7 +32,6 @@ const saveToDatabase = async () => {
     mongoose.connection.close();
   }
 };
-connectToDatabase();
 
 const personSchema = new Schema({
   name: String,
@@ -40,10 +39,10 @@ const personSchema = new Schema({
 });
 
 const Person = mongoose.model('Person', personSchema);
-
 const person = new Person({
   name: name,
   number: number,
 });
 
+connectToDatabase();
 saveToDatabase();
