@@ -33,8 +33,9 @@ const saveToDatabase = async () => {
 const listAllPersons = async () => {
   try {
     const persons = await Person.find({});
-    persons.forEach((person) => {
-      console.log(person);
+    console.log('Phonebook');
+    persons.forEach((p) => {
+      console.log(p.name, p.number);
     });
   } catch (error) {
     console.log(console.log('cant list people ', error));
