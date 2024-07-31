@@ -1,10 +1,12 @@
 require('dotenv').config();
-const url = process.env.MONGODB_URI;
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const PORT = process.env.PORT || 3001;
 const app = express();
+
+const { Schema } = mongoose;
+const url = process.env.MONGODB_URI;
+const PORT = process.env.PORT || 3001;
 let notes = [
   {
     id: '1',
@@ -25,11 +27,6 @@ let notes = [
 const connectToDatabase = async () => {
   mongoose.set('strictQuery', false);
 
-  const noteSchema = new mongoose.Schema({
-    content: String,
-    important: Boolean,
-  });
-  const Note = mongoose.model('Note', noteSchema);
   try {
     await mongoose.connect(url);
     console.log('DATABASE SUCCESSFULLY CONNECTED ');
@@ -40,14 +37,28 @@ const connectToDatabase = async () => {
 
 const startServer = async () => {
   await connectToDatabase();
+  const noteSchema = new Schema({
+    content: String,
+    important: Boolean,
+  });
+
+  noteSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+      returnedObject.id = returnedObject._id.toString();
+      delete returnedObject._id;
+      delete returnedObject.__v;
+    },
+  });
+
+  const Note = mongoose.model('Note', noteSchema);
 
   app.use(express.json());
   app.use(express.static('dist'));
   app.use(cors());
+
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
-  app.use(express.json());
 
   app.use((request, response, next) => {
     console.log('Method:', request.method);
@@ -57,8 +68,10 @@ const startServer = async () => {
     next();
   });
 
-  app.get('/', (request, response) => {
-    response.send('<h1>Hello!</h1>');
+  app.get('/api/notes', (request, response) => {
+    Note.find({}).then((notes) => {
+      response.json(notes);
+    });
   });
 
   app.get('/api/notes/:id', (request, response) => {
@@ -102,10 +115,6 @@ const startServer = async () => {
     notes = notes.concat(note);
 
     response.json(note);
-  });
-
-  app.get('/api/notes', (request, response) => {
-    response.json(notes);
   });
 
   app.use((request, response) => {
