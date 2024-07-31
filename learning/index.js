@@ -46,14 +46,17 @@ app.get('/api/notes', (request, response) => {
 });
 
 app.get('/api/notes/:id', (request, response) => {
-  const id = request.params.id;
-  const note = notes.find((note) => note.id === id);
+  // const id = request.params.id
 
-  if (note) {
-    response.json(note);
-  } else {
-    response.status(404).end();
-  }
+  Note.findById(request.params.id)
+    .then((note) => response.json(note))
+    .catch((err) => {
+      console.log(err);
+      // Error occurred during the query
+      response.status(500).json({
+        error: 'No note exists with that ID',
+      });
+    });
 });
 
 app.delete('/api/notes/:id', (request, response) => {
