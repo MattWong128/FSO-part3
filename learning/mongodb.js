@@ -22,9 +22,9 @@ const connectToDatabase = async () => {
   }
 };
 
-const addPerson = async () => {
+const saveToDatabase = async () => {
   try {
-    person.save();
+    await person.save();
     console.log(`added name ${name} number ${number} to phonebook`);
   } catch (error) {
     console.log(error);
@@ -46,4 +46,4 @@ const person = new Person({
   number: number,
 });
 
-addPerson();
+saveToDatabase();
