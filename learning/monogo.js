@@ -5,8 +5,6 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 const password = process.argv[2];
-//ltRvk6bH7SXYoler
-// const password = FJsiq6aZiZjnP01m
 
 const url = `mongodb+srv://user:${password}@cluster0.6dobhny.mongodb.net/`;
 mongoose.set('strictQuery', false);

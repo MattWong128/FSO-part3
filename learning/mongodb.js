@@ -28,11 +28,17 @@ const saveToDatabase = async () => {
   } catch (error) {
     console.log(error);
   } finally {
-    mongoose.connection.close();
   }
 };
-const listAllDataBase = async () => {
-  await Person.find('{}');
+const listAllPersons = async () => {
+  try {
+    const persons = await Person.find({});
+    persons.forEach((person) => {
+      console.log(person);
+    });
+  } catch (error) {
+    console.log(console.log('cant list people ', error));
+  }
 };
 
 const personSchema = new Schema({
@@ -46,8 +52,19 @@ const person = new Person({
   number: number,
 });
 
-connectToDatabase();
-if (process.argv.length == 3) {
-  listAllDataBase();
-}
-saveToDatabase();
+const main = async () => {
+  try {
+    await connectToDatabase();
+    if (process.argv.length == 3) {
+      await listAllPersons();
+    } else {
+      await saveToDatabase();
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    mongoose.connection.close();
+  }
+};
+
+main();
