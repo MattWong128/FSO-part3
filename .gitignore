@@ -1,4 +1,5 @@
 test.js
 learning/node_modules/
 phonebook/node_modules/
-
+*.txt
+pass.txt

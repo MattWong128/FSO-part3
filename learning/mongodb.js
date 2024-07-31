@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-//mongodb+srv://user:ltRvk6bH7SXYoler@cluster0.6dobhny.mongodb.net/
 
 if (process.argv.length < 3) {
   console.log('give password as argument');
@@ -32,6 +31,9 @@ const saveToDatabase = async () => {
     mongoose.connection.close();
   }
 };
+const listAllDataBase = async () => {
+  await Person.find('{}');
+};
 
 const personSchema = new Schema({
   name: String,
@@ -45,4 +47,7 @@ const person = new Person({
 });
 
 connectToDatabase();
+if (process.argv.length == 3) {
+  listAllDataBase();
+}
 saveToDatabase();
