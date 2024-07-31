@@ -1,22 +1,35 @@
 require('dotenv').config();
 const url = process.env.MONGODB_URI;
-
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-
 const PORT = process.env.PORT || 3001;
 const app = express();
-
-mongoose.set('strictQuery', false);
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
-});
-const Note = mongoose.model('Note', noteSchema);
-
+let notes = [
+  {
+    id: '1',
+    content: 'HTML is easy',
+    important: true,
+  },
+  {
+    id: '2',
+    content: 'Browser can execute only JavaScript',
+    important: false,
+  },
+  {
+    id: '3',
+    content: 'GET and POST are the most important methods of HTTP protocol',
+    important: true,
+  },
+];
 const connectToDatabase = async () => {
+  mongoose.set('strictQuery', false);
+
+  const noteSchema = new mongoose.Schema({
+    content: String,
+    important: Boolean,
+  });
+  const Note = mongoose.model('Note', noteSchema);
   try {
     await mongoose.connect(url);
     console.log('DATABASE SUCCESSFULLY CONNECTED ');
@@ -43,24 +56,6 @@ const startServer = async () => {
     console.log('---');
     next();
   });
-
-  let notes = [
-    {
-      id: '1',
-      content: 'HTML is easy',
-      important: true,
-    },
-    {
-      id: '2',
-      content: 'Browser can execute only JavaScript',
-      important: false,
-    },
-    {
-      id: '3',
-      content: 'GET and POST are the most important methods of HTTP protocol',
-      important: true,
-    },
-  ];
 
   app.get('/', (request, response) => {
     response.send('<h1>Hello!</h1>');
@@ -117,4 +112,5 @@ const startServer = async () => {
     response.status(404).send({ error: 'unknown endpoint' });
   });
 };
+
 startServer();
