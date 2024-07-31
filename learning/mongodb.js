@@ -16,12 +16,22 @@ mongoose.set('strictQuery', false);
 const connectToDatabase = async () => {
   try {
     await mongoose.connect(url);
-    console.log('connected ', res);
+    console.log('connected');
   } catch (error) {
     console.log('FAILED ', error);
   }
 };
 
+const addPerson = async () => {
+  try {
+    person.save();
+    console.log(`added name ${name} number ${number} to phonebook`);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    mongoose.connection.close();
+  }
+};
 connectToDatabase();
 
 const personSchema = new Schema({
@@ -35,7 +45,5 @@ const person = new Person({
   name: name,
   number: number,
 });
-person.save().then((res) => {
-  console.log(res);
-  mongoose.connection.close();
-});
+
+addPerson();
