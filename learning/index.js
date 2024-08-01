@@ -46,14 +46,19 @@ app.get('/api/notes', (request, response) => {
 });
 //To do
 app.get('/api/notes/:id', (request, response) => {
+  const id = request.params.id;
   Note.findById(request.params.id)
-    .then((note) => response.json(note))
+    .then((note) => {
+      if (!note)
+        response.json({
+          error: `ID ${id} does not exist`,
+        });
+      else response.json(note);
+    })
     .catch((err) => {
-      console.log(err);
       // Error occurred during the query
       response.status(500).json({
-        error: 'No note exists with that ID',
-        response: err,
+        error: 'Invalid ID: must be 24 charcters long / contains only hexdecimal',
       });
     });
 });
@@ -75,7 +80,6 @@ app.post('/api/notes', (request, response) => {
       error: 'content missing',
     });
   }
-
   const note = new Note({
     content: body.content,
     important: body.important || false,
